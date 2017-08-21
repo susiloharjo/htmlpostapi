@@ -1,0 +1,220 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+
+    <title>Test API</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div class="container">
+    <h1>Ini adalah Form Test API </h1>
+    <p>Form ini menggunakan teknologi API sehingga kita bisa posting lewat mana saja dengan form ini <br>
+    dan sangat memungkinkan untuk membuat aplikasi dekstop dan datanya dikirim ke server kita<br>
+  </p>
+
+  <p>Database pada aplikasi ini menggunakan mongo db</p>
+  <hr>
+
+  <div class="col-sm-12 col-md-9 col-lg-9">
+
+    <form class="form-group" id="myform" >
+  <!-- <form class="form-group" action="http://10.80.3.116:3000/project/" method="post" > -->
+
+  <div class="input-group">
+    <span class="input-group-addon">Masukkan Nama Project</span>
+    <input type="text" class="form-control" id="nama" name="nama" placeholder="masukkan nama">
+  </div>
+  <br>
+  <div class="input-group">
+    <span class="input-group-addon">Masukkan No Project</span>
+    <input type="text" class="form-control" id="noprj" name="noprj" placeholder="masukkan no prj">
+  </div>
+  <br>
+  <div class="input-group">
+    <span class="input-group-addon">Masukkan Lokasi Project</span>
+    <input type="text" class="form-control" id="lokasi" name="lokasi" placeholder="masukkan lokasi">
+  </div>
+<br>
+  <button type="submit" class="btn btn-primary">Input</button>
+
+  </form>
+</div>
+
+<!-- <table id="example" class="display" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Lokasi</th>
+                <th>No Prj</th>
+                <th>No Prj</th>
+
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Nama</th>
+                <th>Lokasi</th>
+                <th>No Prj</th>
+                <th>No Prj</th>
+
+        </tfoot>
+    </table> -->
+
+
+</div>
+<div class="container">
+<div id="myData"></div>
+</div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js" charset="utf-8"></script>
+    <!-- <script type="text/javascript">
+    $.ajax({
+    dataType: "json",
+    url: "http://10.80.3.116:3000/project/",
+    success: function(e){console.log(e);}
+  });
+
+
+ </script> -->
+
+ <script>
+ $.ajax({
+   url:'http://10.80.3.116:3000/project/',
+   dataType:'json',
+   type:'get',
+   cache:false,
+   success : function(data) {
+     // console.log(data);
+    //  console.log( e );
+
+     $.each(data, function( index, value ) {
+            var row =
+            $("<div class='col-lg-4' id='reload'> <div class='panel panel-success'> <div class='panel-heading'> <h3 class='panel-title'>"
+            + value.nama +
+            "</h3></div><div class='panel-body'> " +
+            "Nama Project : "
+            + value.lokasi +
+            "<br>" +
+            "No PRJ : "
+            + value.noprj +
+            "<br>" +
+            "Lokasi : "
+            + value.lokasi +
+            "<br>" +
+            "</div></div></div>");
+
+           //  show data by id
+            $("#myData").append(row);
+         });
+   }
+
+ });
+
+ var form = $("#myform");
+
+ $("#myform").submit(function(e) {
+     e.preventDefault();
+     $.ajax({
+         type: "POST",
+         url: 'http://10.80.3.116:3000/project/',
+         data: form.serialize(),
+         success: function(response) {
+             console.log(response);
+             $("#result").html(response);
+
+            //  clear input box
+            var elems = document.getElementsByTagName("input");
+            var l = elems.length;
+            for (var i = 0; i < l; ++i){
+              elems[i].value="";
+            }
+
+            //windows reload
+             window.location.reload();
+
+
+         },
+         error: function() {
+             alert('Error Submitting');
+         }
+     })
+ })
+
+ // var namaku = document.getElementById("nama").value;
+ // var lokasiku = document.getElementById("lokasi").value;
+ // var noprjku = document.getElementById("noprj").value;
+
+ // $("button").click(function() {
+ //  // alert("klik");
+ //  $.post( "http://10.80.3.116:3000/project/", { nama: "coba", lokasi: "kantor aja", noprj: "99" } );
+ // });
+
+
+</script>
+
+<!-- <script>
+    (function($){
+        function processForm( e ){
+            $.ajax({
+                url: 'http://10.80.3.116:3000/project/',
+                dataType: 'text',
+                type: 'post',
+                contentType: 'application/x-www-form-urlencoded',
+                // data: $(this).serialize(),
+                data: dataString,
+                success: function( data, textStatus, jQxhr ){
+                    $('#response pre').html( data );
+                },
+                error: function( jqXhr, textStatus, errorThrown ){
+                    console.log( errorThrown );
+                }
+            });
+
+            e.preventDefault();
+        }
+
+        $("button").submit( processForm );
+    })(jQuery);
+</script> -->
+<!-- <script type="text/javascript">
+    $(document).ready(function() {
+        var form = $("#myform");
+
+        $("#myform").submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: 'http://10.80.3.116:3000/project/',
+                data: form.serialize(),
+                success: function(response) {
+                    console.log(response);
+                    $("#result").html(response);
+                },
+                error: function() {
+                    alert('Error Submitting');
+                }
+            })
+        })
+    })
+</script> -->
+</body>
+</html>
